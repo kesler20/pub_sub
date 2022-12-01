@@ -72,3 +72,11 @@ sudo apt-get install python3.7
 sudo apt-get install python3.8
 sudo apt-get install python3.9
 ```
+
+## Mypy
+
+if you need to install missing stubs run
+
+```bash
+mypy --install-types
+```

@@ -1,12 +1,12 @@
 import string
 import random
-from typing import Callable, Optional, Any, List
-from pub_sub._types import MQTTMessage
-from config import *
+from typing import Callable, Optional, Any, List, Tuple
 import AWSIoTPythonSDK.MQTTLib as AWSIoTPyMQTT
 from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
 import AWSIoTPythonSDK
 import time
+from config import END_POINT, PATH_TO_ROOT_CA, PATH_TO_PRIVATE_KEY, PATH_TO_CERTIFICATE
+from src.pub_sub._types import MQTTMessage
 
 
 class MQTTClient:
@@ -45,6 +45,7 @@ class MQTTClient:
 
     @property
     def clientID(self) -> str:
+        """returns a random string of 8 digits"""
         return self._clientID
 
     def _generate_clientID(self, length: int = 8) -> str:
@@ -56,7 +57,7 @@ class MQTTClient:
             PATH_TO_ROOT_CA, PATH_TO_PRIVATE_KEY, PATH_TO_CERTIFICATE)
         self._client.connect(keepAliveIntervalSecond=900)
 
-    def _guard_clause(self, args: List[tuple], result) -> Any:
+    def _guard_clause(self, args: List[Tuple[Any, Any]], result) -> Any:
         """Every public method should call the guard clause"""
         if False in [type(var) == var_type for var, var_type in args]:
             return result
@@ -68,7 +69,7 @@ class MQTTClient:
             self._client.unsubscribe(topic)
         self._client.disconnect()
 
-    def publish_data(self, topic: str, payload: str, quos: Optional[int] = 0) -> None:
+    def publish_data(self, topic: str, payload: str, quos: Optional[int] = 0) -> Any:
         """publish to the given topic
 
         Params
@@ -101,11 +102,12 @@ class MQTTClient:
         df.to_json()
         ```
         """
-        if self._guard_clause([(topic, str), (payload, str)], None) == None:
-            return None
-        self._client.publish(topic, payload, quos)
 
-    def subscribe_to_topic(self, topic: str, custom_callback: Callable[[None, None, MQTTMessage], None], quos: Optional[int] = 1) -> None:
+        if self._guard_clause([(topic, str), (payload, str)], None) is None:
+            return None
+        return None if self._client.publish(topic, payload, quos) else False
+
+    def subscribe_to_topic(self, topic: str, custom_callback: Callable[[None, None, MQTTMessage], None], quos: Optional[int] = 1) -> Any:
         """subscribe to the given topic
 
         Params
@@ -129,26 +131,9 @@ class MQTTClient:
             function(message)
         ```
         where message has properties message.payload and message.topic"""
-        if self._guard_clause([(topic, str)], None) == None:
+
+        if self._guard_clause([(topic, str)], None) is None:
             return None
-        self._client.subscribe(topic, quos, custom_callback)
+        return None if self._client.subscribe(topic, quos, custom_callback) else False
 
 
-if __name__ == "__main__":
-    def cb(client: None, data: None, message: MQTTMessage):
-        print("called")
-        print(message.payload.decode())
-
-
-    cli = MQTTClient()
-    cli2 = MQTTClient()
-
-
-    cli.subscribe_to_topic("this", cb)
-
-    while True:
-        try:
-            cli2.publish_data("this", "hello world")
-            time.sleep(1)  # in seconds
-        except AWSIoTPythonSDK.exception.AWSIoTExceptions.subscribeTimeoutException:
-            pass

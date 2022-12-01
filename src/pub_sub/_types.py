@@ -1,14 +1,13 @@
-from typing import TypedDict, ByteString
-
-class MQTTMessage(TypedDict):
-  timestamp: int
-  state: bool
-  dup: bool
-  mid: bool
-  topic: str
-  payload: ByteString
-  qos: int
-  retain: bool
+from dataclasses import dataclass
 
 
-
+@dataclass
+class MQTTMessage:
+    timestamp: int
+    state: bool
+    dup: bool
+    mid: bool
+    topic: str
+    payload: bytes
+    qos: int
+    retain: bool

@@ -1,9 +1,10 @@
 import pandas as pd
 import unittest
-from connector import MQTTClient
+from pub_sub.connector import MQTTClient
 import json
 from src.pub_sub._types import MQTTMessage
 import time
+
 
 class TestMQTTClient(unittest.TestCase):
 

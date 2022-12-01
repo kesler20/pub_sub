@@ -1,6 +1,6 @@
 import pandas as pd
 import unittest
-from connector import MQTTClient
+from pub_sub.connector import MQTTClient
 import json
 
 
@@ -72,7 +72,7 @@ class Test_IO_MQTTClient(unittest.TestCase):
         -  None
         """
         # array of arguments which are expected by the method being tested
-        correct_input = [self.test_topic,self._call_back]
+        correct_input = [self.test_topic, self._call_back]
         # array containing the expected correct result of the function call
         correct_output = [None]
 
@@ -86,24 +86,18 @@ class Test_IO_MQTTClient(unittest.TestCase):
         # array containing the result of the function call
         invalid_values_output = [None]
 
-        test_result = self.test_client.subscribe_to_topic(*correct_input)
+        test_result = self.test_client.subscribe_to_topic(*correct_input) # type: ignore [arg-type]
         self.assertEqual(test_result, correct_output[0])
-
         # assert that the type returned by the method is correct
         self.assertEqual(type(test_result), type(None))
 
-        # assert that the type returned by the method is correct
-        self.assertEqual(type(test_result), type(None))
-
-        test_result = self.test_client.subscribe_to_topic(*invalid_types_input)
+        test_result = self.test_client.subscribe_to_topic(*invalid_types_input) # type: ignore [arg-type]
         self.assertEqual(test_result, invalid_types_output[0])
-
         # assert that the type returned by the method is correct
         self.assertEqual(type(test_result), type(None))
 
-        test_result = self.test_client.subscribe_to_topic(*invalid_values_input)
+        test_result = self.test_client.subscribe_to_topic(*invalid_values_input) # type: ignore [arg-type]
         self.assertEqual(test_result, invalid_values_output[0])
-
         # assert that the type returned by the method is correct
         self.assertEqual(type(test_result), type(None))
 
