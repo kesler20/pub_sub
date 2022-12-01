@@ -1,7 +1,7 @@
 from starlette.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 from fastapi import FastAPI
-import src.pub_sub.connector as connector
+import pub_sub.mqtt_client as mqtt_client
 
 app = FastAPI()
 app.add_middleware(
@@ -20,5 +20,5 @@ async def read_root():
 
 @app.post('/mqtt/connection_status')
 async def handle_upload():
-    connector.MQTTClient
+    mqtt_client.MQTTClient
     return {"connection_status": 200}

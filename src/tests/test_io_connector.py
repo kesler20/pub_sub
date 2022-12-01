@@ -1,6 +1,6 @@
 import pandas as pd
 import unittest
-from pub_sub.connector import MQTTClient
+from pub_sub.mqtt_client import MQTTClient
 import json
 
 
