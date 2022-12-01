@@ -48,3 +48,4 @@ urllib3>=1.26.10
 uvicorn>=0.18.2
 Werkzeug>=2.1.2
 zipp>=3.8.1
+AWSIoTPythonSDK>=1.5.2
