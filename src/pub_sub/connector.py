@@ -3,8 +3,6 @@ import random
 from typing import Callable, Optional, Any, List, Tuple
 import AWSIoTPythonSDK.MQTTLib as AWSIoTPyMQTT
 from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
-import AWSIoTPythonSDK
-import time
 from config import END_POINT, PATH_TO_ROOT_CA, PATH_TO_PRIVATE_KEY, PATH_TO_CERTIFICATE
 from src.pub_sub._types import MQTTMessage
 
