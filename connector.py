@@ -1,6 +1,6 @@
 import string
 import random
-from typing import Callable, Optional
+from typing import Callable, Optional, Any, List
 from pub_sub._types import MQTTMessage
 from config import *
 import AWSIoTPythonSDK.MQTTLib as AWSIoTPyMQTT
@@ -54,6 +54,13 @@ class MQTTClient:
             PATH_TO_ROOT_CA, PATH_TO_PRIVATE_KEY, PATH_TO_CERTIFICATE)
         self._client.connect(keepAliveIntervalSecond=900)
 
+    def _guard_clause(self, args: List[tuple], result) -> Any:
+        """Every public method should call the guard clause"""
+        if False in [type(var) == var_type for var, var_type in args]:
+            return result
+        else:
+            pass
+
     def tear_down(self, *topics) -> None:
         for topic in topics:
             self._client.unsubscribe(topic)
@@ -92,6 +99,8 @@ class MQTTClient:
         df.to_json()
         ```
         """
+        if self._guard_clause([(topic, str), (payload, str), (quos, int)], None) == None:
+            return None
         self._client.publish(topic, payload, quos)
 
     def subscribe_to_topic(self, topic: str, custom_callback: Callable[[None, None, MQTTMessage], None], quos: Optional[int] = 1) -> None:
@@ -118,5 +127,6 @@ class MQTTClient:
             function(message)
         ```
         where message has properties message.payload and message.topic"""
-
+        if self._guard_clause([(topic, str), (quos, int)], None) == None:
+            return None
         self._client.subscribe(topic, quos, custom_callback)

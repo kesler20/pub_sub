@@ -1,7 +1,9 @@
 # Pytest Features
+
 the --cov flag enables test coverage reports to be generated
 it is also possible to generate reports in html so that you can see
 which lines have not being covered
+
 ```python
 import pytest
 
@@ -25,11 +27,12 @@ def test_feature():
 fixtures allow you to share a resource such as a database connection across the multiple tests
 therefore, instead of writing setup code for multiple tests you can use the following
 
-``conftest.py``
+`conftest.py`
+
 ```python
 import pytest
 
-# if a resource needs to be accessed multiple times across different tests and the access is expensive 
+# if a resource needs to be accessed multiple times across different tests and the access is expensive
 # you should use yield because is a resource which needs to be closed
 # the connection will be torn down after all tests run
 # by specifying the scope you allow the connection to be created only once
@@ -40,9 +43,9 @@ def db_conn():
     url = ...
     with db.connect(url) as conn:
         yield conn
-    
+
 test_slapping
-import pytest 
+import pytest
 def test_slapping(db_conn):
     db_conn.read_slaps()
     assert...
