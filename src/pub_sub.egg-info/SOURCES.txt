@@ -1,0 +1,14 @@
+README.md
+pyproject.toml
+setup.cfg
+setup.py
+src/pub_sub/__init__.py
+src/pub_sub/main.py
+src/pub_sub/py.typed
+src/pub_sub/types.py
+src/pub_sub.egg-info/PKG-INFO
+src/pub_sub.egg-info/SOURCES.txt
+src/pub_sub.egg-info/dependency_links.txt
+src/pub_sub.egg-info/not-zip-safe
+src/pub_sub.egg-info/requires.txt
+src/pub_sub.egg-info/top_level.txt
