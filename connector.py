@@ -5,6 +5,8 @@ from pub_sub._types import MQTTMessage
 from config import *
 import AWSIoTPythonSDK.MQTTLib as AWSIoTPyMQTT
 from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
+import AWSIoTPythonSDK
+import time
 
 
 class MQTTClient:
@@ -59,7 +61,7 @@ class MQTTClient:
         if False in [type(var) == var_type for var, var_type in args]:
             return result
         else:
-            pass
+            return "guarded"
 
     def tear_down(self, *topics) -> None:
         for topic in topics:
@@ -99,7 +101,7 @@ class MQTTClient:
         df.to_json()
         ```
         """
-        if self._guard_clause([(topic, str), (payload, str), (quos, int)], None) == None:
+        if self._guard_clause([(topic, str), (payload, str)], None) == None:
             return None
         self._client.publish(topic, payload, quos)
 
@@ -127,6 +129,26 @@ class MQTTClient:
             function(message)
         ```
         where message has properties message.payload and message.topic"""
-        if self._guard_clause([(topic, str), (quos, int)], None) == None:
+        if self._guard_clause([(topic, str)], None) == None:
             return None
         self._client.subscribe(topic, quos, custom_callback)
+
+
+if __name__ == "__main__":
+    def cb(client: None, data: None, message: MQTTMessage):
+        print("called")
+        print(message.payload.decode())
+
+
+    cli = MQTTClient()
+    cli2 = MQTTClient()
+
+
+    cli.subscribe_to_topic("this", cb)
+
+    while True:
+        try:
+            cli2.publish_data("this", "hello world")
+            time.sleep(1)  # in seconds
+        except AWSIoTPythonSDK.exception.AWSIoTExceptions.subscribeTimeoutException:
+            pass

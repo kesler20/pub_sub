@@ -4,7 +4,7 @@ from connector import MQTTClient
 import json
 
 
-class Test_MQTTClient(unittest.TestCase):
+class Test_IO_MQTTClient(unittest.TestCase):
 
     def setUp(self):
         self.test_client = MQTTClient()

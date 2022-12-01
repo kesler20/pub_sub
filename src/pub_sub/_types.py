@@ -1,5 +1,4 @@
-from typing import TypedDict
-
+from typing import TypedDict, ByteString
 
 class MQTTMessage(TypedDict):
   timestamp: int
@@ -7,7 +6,7 @@ class MQTTMessage(TypedDict):
   dup: bool
   mid: bool
   topic: str
-  payload: None
+  payload: ByteString
   qos: int
   retain: bool
 
