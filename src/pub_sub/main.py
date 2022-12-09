@@ -1,7 +1,10 @@
 from starlette.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 from fastapi import FastAPI
-import pub_sub.mqtt_client as mqtt_client
+try:
+    import pub_sub.mqtt_client as mqtt_client
+except ModuleNotFoundError:
+    import src.pub_sub.mqtt_client as mqtt_client
 
 app = FastAPI()
 app.add_middleware(

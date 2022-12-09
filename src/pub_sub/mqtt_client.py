@@ -1,3 +1,5 @@
+import json
+import time
 import string
 import random
 from typing import Callable, Optional, Any, List, Tuple
@@ -5,6 +7,7 @@ import AWSIoTPythonSDK.MQTTLib as AWSIoTPyMQTT
 from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
 from config import END_POINT, PATH_TO_ROOT_CA, PATH_TO_PRIVATE_KEY, PATH_TO_CERTIFICATE
 from src.pub_sub._types import MQTTMessage
+import AWSIoTPythonSDK
 
 
 class MQTTClient:
@@ -135,3 +138,24 @@ class MQTTClient:
         return None if self._client.subscribe(topic, quos, custom_callback) else False
 
 
+data = 0
+
+def cb(client: None, user_data: None, message: MQTTMessage) -> None:
+    global data
+    data = message.payload.decode()
+    data = json.loads(data)
+    print(data)
+    data = data["Value"]
+
+client = MQTTClient()
+client.subscribe_to_topic("testiot", cb)
+
+while True:
+    try:
+        # application running in the loop
+        client.publish_data("tff/data", data)
+        print("data sent", data)
+        print("type of data", type(data))
+        time.sleep(1)
+    except AWSIoTPythonSDK.exception.AWSIoTExceptions.subscribeTimeoutException:
+        pass
