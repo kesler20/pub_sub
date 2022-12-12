@@ -2,9 +2,9 @@ from starlette.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 from fastapi import FastAPI
 try:
-    import pub_sub.mqtt_client as mqtt_client
+    import pub_sub.connector as conn
 except ModuleNotFoundError:
-    import src.pub_sub.mqtt_client as mqtt_client
+    import src.pub_sub.connector as conn
 
 app = FastAPI()
 app.add_middleware(
@@ -23,5 +23,5 @@ async def read_root():
 
 @app.post('/mqtt/connection_status')
 async def handle_upload():
-    mqtt_client.MQTTClient
+    conn.data
     return {"connection_status": 200}
